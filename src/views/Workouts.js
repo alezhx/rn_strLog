@@ -3,15 +3,8 @@ import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import WorkoutsTab from './WorkoutsStack/WorkoutsTab'
+import ExercisesTab from './Exercises/ExercisesTab'
 import { createStackNavigator } from '@react-navigation/stack';
-
-function ExercisesTab() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Settings!</Text>
-    </View>
-  );
-}
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -36,7 +29,7 @@ const WorkoutsTabStack = () => (
   </WorkoutStack.Navigator>
 )
 
-export default function App() {
+export default function WorkoutsAndExercises() {
   return (
       <Tab.Navigator>
         <Tab.Screen name="Workouts" component={WorkoutsTab} />

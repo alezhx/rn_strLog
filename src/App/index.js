@@ -21,6 +21,7 @@ import {
 
 import WorkoutsAndExercises from 'src/views/Workouts'
 import NewWorkout from 'src/views/WorkoutsStack/NewWorkout'
+import NewExercise from 'src/views/Exercises/NewExercise'
 import { ThemeProvider } from "react-native-elements";
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -48,6 +49,7 @@ const AuthStackScreen = () => (
 const Tabs = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 
+///// MAIN AUTHED STACK
 const HomeStackScreen = () => (
   <HomeStack.Navigator
   screenOptions={{
@@ -72,6 +74,10 @@ const HomeStackScreen = () => (
     <HomeStack.Screen
       name="New Workout"
       component={NewWorkout}
+    />
+    <HomeStack.Screen
+      name="New Exercise"
+      component={NewExercise}
     />
     <HomeStack.Screen
       name="Details"

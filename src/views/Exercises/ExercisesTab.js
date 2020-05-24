@@ -1,96 +1,74 @@
 import React, {Component} from 'react';
 import {
-  ActivityIndicator,
-  Alert,
-  DeviceEventEmitter,
   FlatList,
   SectionList,
   Image,
-  Keyboard,
-  NativeModules,
-  RefreshControl,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  AsyncStorage,
 } from 'react-native';
 import {NavBarHeight, ScreenDimensions, TabBar} from 'src/utils/Dimensions';
 import {AddButton} from 'src/assets/AddButton.png';
 import palette from 'src/styles/palette';
 import { HighlightButton } from 'src/basecomponents/HighlightButton';
 
-const SampleWorkouts = [
-  {name: 'Workout 1 - Push (PPL)'},
-  {name: 'Workout 2 - Pull (PPL)'},
-  {name: 'Workout 3 - Legs (PPL)'},
+import { SearchBar } from 'react-native-elements';
+
+
+const Exercises = [
+  {name: 'Pull Up'},
+  {name: 'Lat Pulldown'},
+  {name: 'Seated Cable Row'},
+  {name: 'Incline Dumbbel Curl'},
+  {name: 'Face Pull'},
+  {name: 'Dumbbell Shrug'}
 ]
 
-const DATA = [
-  {
-    title: 'Example Workouts',
-    data: [
-      {name: 'Workout 1 - Push (PPL)'},
-      {name: 'Workout 2 - Pull (PPL)'},
-      {name: 'Workout 3 - Legs (PPL)'},
-    ]
-  },
-  {
-    title: 'Custom Workouts',
-    data: [
-      {name: 'Workout 1 - Push (PPL)'},
-      {name: 'Workout 2 - Pull (PPL)'},
-      {name: 'Workout 3 - Legs (PPL)'},
-      {name: 'Workout 1 - Push (PPL)'},
-      {name: 'Workout 2 - Pull (PPL)'},
-      {name: 'Workout 3 - Legs (PPL)'},
-      {name: 'Workout 1 - Push (PPL)'},
-      {name: 'Workout 2 - Pull (PPL)'},
-      {name: 'Workout 3 - Legs (PPL)'},
-      {name: 'Workout 1 - Push (PPL)'},
-      {name: 'Workout 2 - Pull (PPL)'},
-      {name: 'Workout 3 - Legs (PPL)'},
-      {name: 'Workout 3 - Legs (PPL)'},
-      {name: 'Workout 1 - Push (PPL)'},
-      {name: 'Workout 2 - Pull (PPL)'},
-      {name: 'Workout 3 - Legs (PPL)'},
-      {name: 'Workout 1 - Push (PPL)'},
-      {name: 'Workout 2 - Pull (PPL)'},
-      {name: 'Workout 3 - Legs (PPL)'},
-    ]
+export default class ExercisesTab extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      searchInput: '',
+      exercises: []
+    }
+  };
+
+  componentDidMount = () => {
+    this.fetchExercises()
   }
-]
 
-export default class WorkoutsTab extends Component {
+  fetchExercises = () => {
+    console.log('fetching...')
+    AsyncStorage.getItem('Exercises', (err,res) => {
+      this.setState({exercises: res}, ()=>console.log('TESTEST', this.state.exercises))
+      if (err) console.log(err)
+    })
+  }
 
-  renderSampleWorkouts = () => { 
+
+  renderSampleExercises = () => { 
     return (
       <View>
         {/* <FlatList
-          data={SampleWorkouts}
+          data={SampleExercises}
           renderItem={({item,index})=>this.renderWorkoutListItem(item, index)}
           keyExtractor = {(item,index) =>{
             return 'key' + item.name + index
           }}
           scrollEnabled={false}
         /> */}
-        <SectionList
-          sections={DATA}
+        <FlatList
+          style={{height:'100%'}}
+          ListHeaderComponent={<View style={{height:30}}/>}
+          data={Exercises}
           keyExtractor = {(item,index) =>{
             return 'key' + item.name + index
           }}
           renderItem={({item,index})=>this.renderWorkoutListItem(item, index)}
+          
           // renderItem={({ item }) => <Item title={item} />}
-          renderSectionHeader={({ section: { title } }) => (
-            <View style={{
-              backgroundColor: palette.secondary.main, 
-              paddingTop: 20,
-              paddingLeft: 15,
-              paddingBottom: 10
-            }}>
-              <Text>{title}</Text>
-            </View>
-          )}
-          stickySectionHeadersEnabled={false}
         />
       </View>
     )
@@ -138,7 +116,7 @@ export default class WorkoutsTab extends Component {
     return(
         <TouchableOpacity
             onPress={() => {
-              this.props.navigation.navigate('New Workout')
+              this.props.navigation.navigate('New Exercise')
             }}
             // style={{backgroundColor:'white'}}
             style={styles.addButton}
@@ -148,10 +126,31 @@ export default class WorkoutsTab extends Component {
     )
   }
 
+  updateSearch = (searchInput) => {
+    this.setState({searchInput})
+  }
+
+  renderSearchBar = () => {
+    const { searchInput } = this.state;
+
+    return (
+      <SearchBar
+        placeholder={'Search exercises...'}
+        inputStyle={{fontSize:15}}
+        containerStyle={{backgroundColor:palette.secondary.main, height:62}}
+        inputContainerStyle={{backgroundColor:palette.white}}
+        platform={'ios'}
+        onChangeText={this.updateSearch}
+        value={searchInput}
+      />
+    );
+  }
+
   render() {
     return (
       <View style={styles.root}>
-        {this.renderSampleWorkouts()}
+        {this.renderSearchBar()}
+        {this.renderSampleExercises()}
         {/* {this.renderUserWorkouts()} */}
         {this.renderAddFileButton()}
       </View>

@@ -9,7 +9,7 @@ export const HighlightButton = ({
   underlayBackgroundColor=palette.newBlue, 
   fontColor=palette.black,
   underlayFontColor=palette.white,
-  fontSize=18,
+  fontSize=16,
   fontWeight,
   activeOpacity=0.9,
   style,
